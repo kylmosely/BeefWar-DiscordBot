@@ -6,39 +6,40 @@ import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEve
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.Objects;
+
 public class BotCommands extends ListenerAdapter {
-    private Dotenv config;
     private boolean isBeef = false;
-    private Member mentionedName;
-    private User user;
 
     public BotCommands() {
     }
 
     @Override
     public void onSlashCommandInteraction(@NotNull SlashCommandInteractionEvent event) {
-        config = Dotenv.load();
+        Dotenv config = Dotenv.load();
         if (event.getName().equals("beef")) {
 
             if (!isBeef) {
-                user = event.getUser();
+                User user = event.getUser();
 
                 String UserId = event.getUser().getId();
-                String mentionedId = event.getOption("person").getAsString();
-                mentionedName = event.getOption("person").getAsMember();
-                event.getGuild().addRoleToMember(UserSnowflake.fromId(mentionedId), event.getGuild().getRoleById(config.get("ROLE"))).queue();
-                event.getGuild().addRoleToMember(UserSnowflake.fromId(UserId), event.getGuild().getRoleById(config.get("ROLE"))).queue();
-
+                String mentionedId = Objects.requireNonNull(event.getOption("person")).getAsString();
+                Member mentionedName = Objects.requireNonNull(event.getOption("person")).getAsMember();
+                Objects.requireNonNull(event.getGuild()).addRoleToMember(UserSnowflake.fromId(mentionedId), Objects.requireNonNull(event.getGuild().getRoleById(config.get("ROLE")))).queue();
+                event.getGuild().addRoleToMember(UserSnowflake.fromId(UserId), Objects.requireNonNull(event.getGuild().getRoleById(config.get("ROLE")))).queue();
+                assert mentionedName != null;
                 event.reply("Beef War Started With " + mentionedName.getAsMention() + " And " + user.getAsMention()).queue();
                 isBeef = true;
+                System.out.println("started, isBeef = " + isBeef);
             } else {
                 event.reply("Sorry, another beef is happening right now.").queue();
             }
             ;
         } else if (event.getName().equals("beefend")){
-            event.getGuild().removeRoleFromMember(event.getMember(), event.getGuild().getRoleById(config.get("ROLE"))).queue();
+            Objects.requireNonNull(event.getGuild()).removeRoleFromMember(Objects.requireNonNull(event.getMember()), Objects.requireNonNull(event.getGuild().getRoleById(config.get("ROLE")))).queue();
             event.reply("Done").queue();
             isBeef = false;
+            System.out.println("ended, isBeef = "+isBeef);
         }
     }
 }
