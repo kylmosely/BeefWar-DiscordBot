@@ -10,10 +10,10 @@ import net.dv8tion.jda.api.interactions.commands.OptionType;
 
 import javax.security.auth.login.LoginException;
 
-public class Bot extends ListenerAdapter
-{
+public class Bot extends ListenerAdapter {
     private final Dotenv config;
-    public Bot()  throws LoginException, InterruptedException {
+
+    public Bot() throws LoginException, InterruptedException {
         config = Dotenv.load();
         String token = config.get("TOKEN");
         String channel = config.get("CHANNEL");
@@ -24,17 +24,17 @@ public class Bot extends ListenerAdapter
                 .build().awaitReady();
         jda.upsertCommand("beef", "beef war will begin")
                 .addOption(OptionType.MENTIONABLE, "person", "person you want to beef with")
+
                 .queue();
-        jda.upsertCommand("beefend","end beef war :)")
-                        .queue();
+        jda.upsertCommand("beefend", "end beef war :)")
+                .queue();
         jda.getGuildById(channel);
     }
 
     public static void main(String[] args) {
         try {
             Bot bot = new Bot();
-        }
-        catch (LoginException | InterruptedException e){
+        } catch (LoginException | InterruptedException e) {
             System.out.println(e);
         }
 
