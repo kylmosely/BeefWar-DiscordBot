@@ -7,6 +7,9 @@ import net.dv8tion.jda.api.OnlineStatus;
 import net.dv8tion.jda.api.entities.Activity;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import net.dv8tion.jda.api.interactions.commands.OptionType;
+import net.dv8tion.jda.api.requests.GatewayIntent;
+import net.dv8tion.jda.api.utils.ChunkingFilter;
+import net.dv8tion.jda.api.utils.MemberCachePolicy;
 
 import javax.security.auth.login.LoginException;
 
@@ -18,6 +21,9 @@ public class Bot extends ListenerAdapter {
         String token = config.get("TOKEN");
         String channel = config.get("CHANNEL");
         JDA jda = JDABuilder.createDefault(token)
+                .setChunkingFilter(ChunkingFilter.ALL) // enable member chunking for all guilds
+                .setMemberCachePolicy(MemberCachePolicy.ALL)
+                .enableIntents(GatewayIntent.GUILD_MEMBERS)
                 .addEventListeners(new BotCommands())
                 .setStatus(OnlineStatus.ONLINE)
                 .setActivity(Activity.watching("You"))
@@ -28,6 +34,7 @@ public class Bot extends ListenerAdapter {
                 .queue();
         jda.upsertCommand("beefend", "end beef war :)")
                 .queue();
+
         jda.getGuildById(channel);
     }
 
