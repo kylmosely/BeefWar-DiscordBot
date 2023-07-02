@@ -43,6 +43,7 @@ public class MessageEventOnBeef extends ListenerAdapter {
 
                     // Delete the MessageEventOnBeef object
                     event.getJDA().removeEventListener(MessageEventOnBeef.this);
+                    timer.cancel();
                 }
             }, TimeUnit.MINUTES.toMillis(10));
         }
