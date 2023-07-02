@@ -34,6 +34,8 @@ public class Bot extends ListenerAdapter {
                 .queue();
         jda.upsertCommand("beefend", "end beef war :)")
                 .queue();
+        jda.upsertCommand("beeflock", "In case a beefer is being a turd")
+                        .queue();
 
         jda.getGuildById(channel);
     }

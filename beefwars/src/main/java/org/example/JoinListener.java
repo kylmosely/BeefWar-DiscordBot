@@ -36,6 +36,7 @@ public class JoinListener extends ListenerAdapter {
             List<Long> ids = getIdsFromHashmap(userRolesMap, userIdJoin);
             for (Long id : ids){
                 Role role = event.getGuild().getRoleById(id);
+                System.out.println(id);
                 assert role != null;
                 event.getGuild().addRoleToMember(Objects.requireNonNull(event.getGuild().getMemberById(userIdJoin)), role).queue();
             }

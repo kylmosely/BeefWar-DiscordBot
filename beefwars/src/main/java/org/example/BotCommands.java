@@ -12,10 +12,12 @@ import java.util.List;
 import java.util.Objects;
 
 public class BotCommands extends ListenerAdapter {
-    private boolean isBeef = false;
-    private int beefend = 0;
-    ArrayList<String> beefers = new ArrayList<String>();
-    ArrayList<String> beefRemaining = new ArrayList<>();
+    public static boolean isBeef = false;
+    public static int beefend = 0;
+    public static String UserId;
+    public static String mentionedId;
+    public static ArrayList<String> beefers = new ArrayList<String>();
+    public static ArrayList<String> beefRemaining = new ArrayList<>();
 
     public static HashMap<String, List<Role>> getMemberRoles(Guild guild) {
         HashMap<String, List<Role>> userRolesMap = new HashMap<>();
@@ -26,7 +28,6 @@ public class BotCommands extends ListenerAdapter {
             List<Role> roles = member.getRoles();
             userRolesMap.put(userId, roles);
         }
-
         return userRolesMap;
     }
 
@@ -40,9 +41,9 @@ public class BotCommands extends ListenerAdapter {
         if (event.getName().equals("beef")) {
             if (!isBeef) {
                 User user = event.getUser();
-                String UserId = event.getUser().getId();
+                UserId = event.getUser().getId();
 
-                String mentionedId = Objects.requireNonNull(event.getOption("person")).getAsString();
+                mentionedId = Objects.requireNonNull(event.getOption("person")).getAsString();
 
                 beefers.add(UserId);
                 beefers.add(mentionedId);
@@ -73,7 +74,6 @@ public class BotCommands extends ListenerAdapter {
             System.out.println(beefend);
             if(beefRemaining.isEmpty()){
                 isBeef = false;
-                event.getChannel().sendMessage("Beef is over. Hope we can now be friends :)");
                 // add another end operation
                 event.getGuild().removeRoleFromMember(UserSnowflake.fromId(beefers.get(0)), event.getGuild().getRoleById(config.get("ROLE"))).queue();
                 event.getGuild().removeRoleFromMember(UserSnowflake.fromId(beefers.get(1)), event.getGuild().getRoleById(config.get("ROLE"))).queue();
@@ -82,10 +82,18 @@ public class BotCommands extends ListenerAdapter {
                 beefRemaining.clear();
                 beefend = 0;
             }
-        } else{
+        } else if (event.getName().equals("beeflock")){
+            if (isBeef == true && beefers.contains(event.getUser().getId())){
+                event.getJDA().addEventListener(new MessageEventOnBeef(event.getChannel()));
+                event.reply("Beef will end in 10 minutes if no new message is sent").queue();
+            }
+        }
+
+        else{
             event.reply("Cannot end beef. Either you are not a beefer, or you have already ended beef.");
         }
     }
+
 }
 
 
@@ -104,4 +112,5 @@ class Rolez {
 }
 
 // TODO: set an Option for what to beef about
-// TODO: create a hash map to get all user's current roles.
+// TODO: emergency! In cose someone is trapped in it.
+// TODO: After 5 minutes, if no additional messages are sent, beef ends.
