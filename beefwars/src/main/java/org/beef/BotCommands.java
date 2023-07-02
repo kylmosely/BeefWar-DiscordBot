@@ -38,6 +38,7 @@ public class BotCommands extends ListenerAdapter {
     @Override
     public void onSlashCommandInteraction(@NotNull SlashCommandInteractionEvent event) {
         Dotenv config = Dotenv.load();
+        // TODO: Add rule for admins to not participate in war
         if (event.getName().equals("beef")) {
             if (!isBeef) {
                 User user = event.getUser();
