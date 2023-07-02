@@ -1,4 +1,4 @@
-package org.example;
+package org.beef;
 
 import io.github.cdimascio.dotenv.Dotenv;
 import net.dv8tion.jda.api.JDA;

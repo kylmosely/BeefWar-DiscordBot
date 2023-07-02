@@ -1,4 +1,4 @@
-package org.example;
+package org.beef;
 
 import net.dv8tion.jda.api.entities.Role;
 import net.dv8tion.jda.api.events.guild.member.GuildMemberJoinEvent;
