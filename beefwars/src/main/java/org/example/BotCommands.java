@@ -112,5 +112,3 @@ class Rolez {
 }
 
 // TODO: set an Option for what to beef about
-// TODO: emergency! In cose someone is trapped in it.
-// TODO: After 5 minutes, if no additional messages are sent, beef ends.
